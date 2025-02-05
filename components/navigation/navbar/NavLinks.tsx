@@ -9,8 +9,7 @@ import React from "react";
 
 const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
   const pathname = usePathname();
-  const userId = 1;
-
+  let userId = 1;
   return (
     <>
       {sidebarLinks.map((item) => {
@@ -29,8 +28,8 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
             key={item.label}
             className={cn(
               isActive
-                ? "primary-gradient rounded-lg text-light-900"
-                : "text-dark300_light900",
+                ? " primary-gradient rounded-lg text-light-900"
+                : " text-dark300_light900",
               " flex items-center justify-start gap-4 bg-transparent p-4"
             )}
           >
@@ -51,7 +50,6 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
             </p>
           </Link>
         );
-
         return isMobileNav ? (
           <SheetClose asChild key={item.route}>
             {LinkComponent}

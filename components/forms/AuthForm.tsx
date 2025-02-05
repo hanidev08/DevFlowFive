@@ -23,12 +23,6 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
@@ -37,12 +31,11 @@ interface AuthFormProps<T extends FieldValues> {
 }
 
 const AuthForm = <T extends FieldValues>({
+  formType,
   schema,
   defaultValues,
-  formType,
   onSubmit,
 }: AuthFormProps<T>) => {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
@@ -54,10 +47,7 @@ const AuthForm = <T extends FieldValues>({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 mt-10"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-10">
         {Object.keys(defaultValues).map((field) => (
           <FormField
             key={field}
@@ -65,7 +55,7 @@ const AuthForm = <T extends FieldValues>({
             name={field as Path<T>}
             render={({ field }) => (
               <FormItem className=" flex w-full flex-col gap-2.5">
-                <FormLabel className=" paraghraph-medium text-dark400_light700">
+                <FormLabel className=" paragraph-medium text-dark400_light700">
                   {field.name === "email"
                     ? "Email Address"
                     : field.name.charAt(0).toUpperCase() + field.name.slice(1)}
@@ -83,9 +73,10 @@ const AuthForm = <T extends FieldValues>({
             )}
           />
         ))}
+
         <Button
           disabled={form.formState.isSubmitting}
-          className=" primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 font-inter !text-light-900"
+          className=" primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-2 font-inter !text-light-900"
         >
           {form.formState.isSubmitting
             ? buttonText === "Sign In"
@@ -95,14 +86,13 @@ const AuthForm = <T extends FieldValues>({
         </Button>
         {formType === "SIGN_IN" ? (
           <p>
-            Don't have an account?
-            {` `}
+            Don't have an account?{" "}
             <Link
               href={ROUTES.SIGN_UP}
               className=" paragraph-semibold primary-text-gradient"
             >
-              Sign up
-            </Link>{" "}
+              Sign Up
+            </Link>
           </p>
         ) : (
           <p>
@@ -111,8 +101,8 @@ const AuthForm = <T extends FieldValues>({
               href={ROUTES.SIGN_IN}
               className=" paragraph-semibold primary-text-gradient"
             >
-              Sign in
-            </Link>{" "}
+              Sign In
+            </Link>
           </p>
         )}
       </form>
