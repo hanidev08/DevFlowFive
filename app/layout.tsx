@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import React from "react";
+
 import "./globals.css";
 import ThemeProvider from "@/context/Theme";
-import { Toaster } from "@/components/ui/toaster";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
-import { ReactNode } from "react";
+import Navbar from "@/components/navigation/navbar";
 
 const inter = localFont({
-  src: "./fonts/interVF.ttf",
+  src: "./fonts/InterVF.ttf",
   variable: "--font-inter",
-  weight: "100 200 300 400 500 600 700 800 900",
+  weight: "100 200 300 400 500 700 800 900",
 });
 
 const spaceGrotesk = localFont({
   src: "./fonts/SpaceGroteskVF.ttf",
   variable: "--font-space-grotesk",
-  weight: "300 400 500 600 700",
+  weight: "300 400 500 700",
 });
 
 export const metadata: Metadata = {
@@ -28,34 +27,26 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth();
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-        />
-      </head>
-      <SessionProvider session={session}>
-        <body
-          className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
+      <body
+        className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Toaster />
-        </body>
-      </SessionProvider>
+          <Navbar />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
-};
-
-export default RootLayout;
+}
